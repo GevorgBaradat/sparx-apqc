@@ -20,7 +20,7 @@ The SVG output runs directly in any modern browser from a folder on disk. No ins
 
 ## Live demo
 
-> Open `index.html` in your browser to explore the full APQC model.
+> Open `[Open live demo →](https://gevorgbaradat.github.io/sparx-apqc)` in your browser to explore the full APQC model.
 
 What you can do:
 
