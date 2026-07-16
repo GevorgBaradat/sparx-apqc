@@ -6,6 +6,20 @@ A complete, navigable process architecture built in Sparx Enterprise Architect a
 
 ---
 
+## Live demo
+
+[Open live demo →](https://gevorgbaradat.github.io/sparx-apqc)
+
+What you can do:
+
+- **Navigate the process hierarchy** — click the 🔗 link icon on any element to drill down to its child diagram. Use the browser Back button to return.
+- **Read descriptions** — hover over any element to see its description from the model (tooltip)
+- **Leave comments** — click any element to open an annotation window. Add your question or remark and save. An orange triangle marks annotated elements.
+- **Save your annotated version** — the "Save with notes..." button writes a new SVG file with all your annotations embedded.
+- **Use Fisheye view** — enable the lens in the control panel for focus+context exploration of dense diagrams
+
+---
+
 ## What this is
 
 This repository contains:
@@ -18,33 +32,19 @@ The SVG output runs directly in any modern browser from a folder on disk. No ins
 
 ---
 
-## Live demo
-
-> [Open live demo →](https://gevorgbaradat.github.io/sparx-apqc) in your browser to explore the full APQC model.
-
-What you can do:
-
-- **Navigate the process hierarchy** — click the 🔗 link icon on any element to drill down to its child diagram. Use the browser Back button to return.
-- **Read descriptions** — hover over any element to see its description from the model (tooltip)
-- **Leave comments** — click any element to open an annotation window. Add your question or remark and save. An orange triangle marks annotated elements.
-- **Save your annotated version** — the "Save with notes..." button writes a new SVG file with all your annotations embedded.
-- **Use Fisheye view** — enable the lens in the control panel for focus+context exploration of dense diagrams
-
----
-
 ## The problem this solves
 
 Sparx EA already has two native export options:
 
-| | Native HTML export | Native SVG export | This script |
-|---|---|---|---|
-| Navigation between diagrams | Limited | None - isolated files | Full drill-down tree |
-| Tooltips from model Notes | No | No | Yes |
-| Annotation and feedback | No | No | Yes - save to file |
-| Design quality | Poor | Basic | Configurable |
-| Fisheye lens | No | No | Yes |
-| Works without web server | Partially | Yes | Yes |
-| No viewer licence needed | Yes | Yes | Yes |
+|                             | Native HTML export | Native SVG export     | This script          |
+| --------------------------- | ------------------ | --------------------- | -------------------- |
+| Navigation between diagrams | Limited            | None - isolated files | Full drill-down tree |
+| Tooltips from model Notes   | No                 | No                    | Yes                  |
+| Annotation and feedback     | No                 | No                    | Yes - save to file   |
+| Design quality              | Poor               | Basic                 | Configurable         |
+| Fisheye lens                | No                 | No                    | Yes                  |
+| Works without web server    | Partially          | Yes                   | Yes                  |
+| No viewer licence needed    | Yes                | Yes                   | Yes                  |
 
 You already own Sparx EA. This script closes the gap between what Sparx exports natively and what your stakeholders actually need: a navigable, annotatable, self-contained model they can explore in a browser and send feedback from.
 
@@ -58,23 +58,19 @@ Build once in Sparx. Publish the SVG tree. Anyone in your organisation can read 
 
 ```
 /
-├── README.md                          # This file
-├── index.html                         # Entry point — opens the top-level APQC diagram
-├── apqc/                              # SVG export — the complete diagram tree
-│   ├── APQC_PCF_Root.svg              # Top level: 8 APQC categories
-│   ├── 1_Develop_Vision_Strategy.svg  # Category 1 diagrams
-│   ├── ...                            # All L1-L4 diagrams, auto-named DiagramName_ID.svg
-├── sparx-project/
-│   └── APQC_PCF_Model.qea             # Sparx EA project file (SQLite, requires Sparx EA to edit)
+├── index.html                    # Entry point — opens the top-level APQC diagram
+├── README.md                     # This file
+├── apqc/                         # SVG export — 1681 diagrams, full APQC L1–L4 tree
 ├── scripts/
-│   ├── ea_diagram_to_svg_v38.js       # Main export script (JScript for Sparx EA)
-│   ├── ea_fisheye_viewer.js           # Fisheye viewer: lens follows mouse
-│   ├── ea_fisheye_center.js           # Fisheye viewer: fixed lens, pan diagram
+│   ├── ea_diagram_to_svg_v38.js  # Main export script (JScript for Sparx EA)
+│   ├── ea_fisheye_viewer.js      # Fisheye viewer: lens follows mouse
+│   ├── ea_fisheye_center.js      # Fisheye viewer: fixed lens, pan diagram
 │   ├── EA_add_composite_to_parent.js  # Utility: build Composite links from ParentID
-│   ├── EA_show_hidden_connectors.js   # Utility: restore hidden connectors on diagram
-│   └── verify_direct.py              # Regression tool: verify Direct connector geometry
+│   └── EA_show_hidden_connectors.js   # Utility: restore hidden connectors on diagram
+├── sparx-project/
+│   └── APQC_721_GiyHub.qea        # Sparx EA project file (requires Sparx EA to edit)
 └── docs/
-    └── scripts-documentation.md       # Full technical documentation of all scripts
+    └── EA_scripts_documentation_GH.md   # Full technical documentation
 ```
 
 ---
@@ -163,17 +159,25 @@ A practical guide to serious business modelling without enterprise budget is in 
 
 The export script handles three connector geometry types automatically:
 
-| Type | Recognition | Algorithm |
-|---|---|---|
-| Direct | No Path, no TREE style | Liang-Barsky line clipping to element bounding boxes |
-| Ortho-Square | Has Path data, TREE=OS | Waypoints from Path + edge attachment by EDGE+SX/SY |
-| Tree | TREE=V/H/LV/LH | 4-point route via horizontal/vertical hub |
+| Type         | Recognition            | Algorithm                                            |
+| ------------ | ---------------------- | ---------------------------------------------------- |
+| Direct       | No Path, no TREE style | Liang-Barsky line clipping to element bounding boxes |
+| Ortho-Square | Has Path data, TREE=OS | Waypoints from Path + edge attachment by EDGE+SX/SY  |
+| Tree         | TREE=V/H/LV/LH         | 4-point route via horizontal/vertical hub            |
 
-Coordinate system: Sparx EA uses Y-down with negative values. The script inverts Y for SVG: `svgY = eaMaxY − eaY + PAD`.
+Coordinate system: Sparx EA uses Y-down with negative values. The script inverts Y for SVG: `svgY = eaMaxY - eaY + PAD`.
 
 Drill-down: two mechanisms supported — Activity/BPMN (`NType=8 + PDATA1`) and Class (`t_diagram.ParentID = element.Object_ID`). Cycle protection via `VISITED[diagID]` map.
 
-Full technical documentation: [docs/scripts-documentation.md](docs/scripts-documentation.md)
+Full technical documentation: [docs/EA_scripts_documentation_GH.md](docs/EA_scripts_documentation_GH.md)
+
+---
+
+## License
+
+Scripts and documentation: MIT License.
+APQC PCF content: based on the APQC Process Classification Framework®, used for demonstration purposes. [apqc.org](https://www.apqc.org/)
+
 ---
 
 *Yurii Cherniavsky · Enterprise Architect · July 2026*
