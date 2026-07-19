@@ -102,7 +102,7 @@ The script reads directly from the Sparx EA SQLite database — it works with `.
 The script exports the full tree recursively — every child diagram, to any depth. Each diagram becomes one SVG file. Navigation links between diagrams use relative paths, so the entire tree works from any folder without a web server.
 
 **Tested with:** Sparx EA 15.x and 16.x (`.qea` SQLite format)
-
+Sparx Enterprise Architect is available from [sparxsystems.eu](https://sparxsystems.eu)
 ---
 
 ## Interactive SVG features
@@ -179,5 +179,7 @@ Scripts and documentation: MIT License.
 APQC PCF content: based on the APQC Process Classification Framework®, used for demonstration purposes. [apqc.org](https://www.apqc.org/)
 
 ---
+
+Built on [Sparx Enterprise Architect](https://sparxsystems.eu) — the modelling platform that makes this possible.
 
 *Yurii Cherniavsky · Enterprise Architect · July 2026*
